@@ -1,0 +1,27 @@
+Task 4 - Evaluation and Model Choice
+
+Metrics were calculated on the held-out test set (154 samples: 100 negative, 54 positive). Metrics were
+implemented manually (TP, TN, FP, FN -> accuracy, precision, recall, F1) for the scratch logistic model
+and match scikit-learn exactly.
+
+Model                  TN  FP  FN  TP  Accuracy  Precision  Recall  F1
+Perceptron (Scratch)   74  26  22  32  0.6883    0.5517     0.5926  0.5714
+Logistic (Scratch)     84  16  26  28  0.7273    0.6364     0.5185  0.5714
+Perceptron (sklearn)   55  45  26  28  0.5390    0.3836     0.5185  0.4409
+Logistic (sklearn)     84  16  26  28  0.7273    0.6364     0.5185  0.5714
+
+Preferred model: Perceptron (Scratch).
+
+In screening, a false negative (missing a diabetic patient) is more costly than a false alarm. So the
+key metric is recall, and the key cell of the confusion matrix is FN.
+- The scratch perceptron has the highest recall (0.5926) and the fewest false negatives (22). It finds
+  32 of 54 positive patients, compared with 28 for the other three models.
+- It does raise more false alarms (FP 26 against 16 for logistic), so precision and accuracy are lower.
+  This is an acceptable trade-off because a false alarm only leads to a follow-up test.
+- The logistic models have the best accuracy (0.7273), but choosing by accuracy would miss 4 more
+  diabetic patients. Accuracy is also misleading here because the classes are imbalanced (65/35).
+- The sklearn perceptron is the worst: low accuracy, low precision and no recall advantage.
+
+Note: logistic regression outputs probabilities, so its recall can be raised by lowering the 0.5
+threshold (e.g. 0.3). With a tuned threshold it would likely be the strongest choice, but at the default
+threshold the scratch perceptron misses the fewest positive cases.

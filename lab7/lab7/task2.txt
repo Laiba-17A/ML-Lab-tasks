@@ -1,0 +1,20 @@
+Task 2 - Both Models From Scratch (NumPy)
+
+Perceptron: step activation (predict 1 if w.x + b >= 0). Mistake-driven updates: for each sample,
+w = w + lr*(y - pred)*x and b = b + lr*(y - pred). Samples are shuffled each epoch (seed 42).
+lr = 0.01, fixed 100 epochs, with early stopping if an epoch has zero errors. The data is not linearly
+separable, so it never reaches zero errors and keeps adjusting until the epoch limit.
+
+Logistic Regression: sigmoid activation and batch gradient descent on average log loss.
+dw = X^T(p - y)/m, db = mean(p - y), lr = 0.1, fixed 1000 iterations. Probabilities are clipped
+when computing the loss for numerical stability.
+
+Results:
+  Perceptron w = [0.0256, 0.0191], b = -0.01
+  Logistic   w = [1.2496, 0.6663], b = -0.838
+  First 5 test predictions (both models): [1, 0, 0, 0, 0]
+  First 5 logistic probabilities: [0.5559, 0.0586, 0.3806, 0.161, 0.0557]
+  Final log loss: 0.4727
+
+The loss curve (loss.png) falls quickly and then flattens, showing gradient descent converged.
+Both models give positive weights to Glucose and BMI, and Glucose has the larger effect.

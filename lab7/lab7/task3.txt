@@ -1,0 +1,26 @@
+Task 3 - Both Models Using scikit-learn
+
+sklearn Perceptron(max_iter=1000, tol=1e-3, random_state=42) and LogisticRegression(random_state=42)
+were trained on exactly the same scaled train/test data from Task 1.
+
+Coefficients:
+  Scratch Perceptron   w = [0.0256, 0.0191],   b = -0.01
+  sklearn Perceptron   w = [2.0347, -2.6839],  b = 0.0
+  Scratch Logistic     w = [1.2496, 0.6663],   b = -0.838
+  sklearn Logistic     w = [1.2311, 0.6572],   b = -0.8336
+
+How the boundaries differ (boundaries.png):
+- Both logistic boundaries are almost the same line. They slope downward, so higher Glucose and higher
+  BMI both push a point toward class 1.
+- The two perceptron boundaries are very different from each other. The scratch perceptron gives a line
+  similar in direction to logistic but shifted, so it predicts class 1 more often. The sklearn perceptron
+  ends on a line with a negative BMI weight, which does not make sense and misclassifies many points.
+
+Why coefficients differ across implementations:
+- Logistic: sklearn adds L2 regularization (C=1.0) by default and uses the lbfgs solver, while the scratch
+  version has no regularization and uses fixed-step gradient descent. Both minimize nearly the same
+  convex loss, so the results are very close but not identical.
+- Perceptron: the data is not linearly separable, so the perceptron never converges. Its final weights
+  depend on the sample order, learning rate (sklearn uses eta0=1.0 against 0.01 here), number of epochs
+  and the stopping rule (tol). Each implementation stops at a different point in an endless sequence of
+  updates. Also, only the direction of perceptron weights matters, not their size, so the scale differs.
